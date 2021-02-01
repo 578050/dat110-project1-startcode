@@ -15,7 +15,6 @@ public class Connection {
 
 	public Connection(Socket socket) {
 
-		//Fili Yafu 
 		try {
 
 			this.socket = socket;
@@ -36,23 +35,40 @@ public class Connection {
 		// TODO
 		// encapsulate the data contained in the message and write to the output stream
 		// Hint: use the encapsulate method on the message
-		throw new UnsupportedOperationException(TODO.method());
+		
+		byte[] encoded = message.encapsulate();
+		try {
+			outStream.write(encoded);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 
 	}
 
 	public Message receive() {
 
-		Message message;
+		Message message = null;
 		byte[] recvbuf;
 
 		// TODO
 		// read a segment (128 bytes) from the input stream and decapsulate into message
 		// Hint: create a new Message object and use the decapsulate method
 		
-		if (true) {
-			throw new RuntimeException("not yet implemented");
-		}
+		try {
+			recvbuf = inStream.readNBytes(MessageConfig.SEGMENTSIZE);
+			message = new Message(recvbuf);
 
+			message.decapsulate(recvbuf);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	
 		return message;
 
 	}

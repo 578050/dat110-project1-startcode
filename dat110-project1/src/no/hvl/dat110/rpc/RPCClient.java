@@ -20,8 +20,7 @@ public class RPCClient {
 	public void connect() {
 		
 		// TODO: connect using the underlying messaging layer connection
-		
-	    throw new UnsupportedOperationException(TODO.method());
+		connection = msgclient.connect();
 			
 	}
 	
@@ -29,7 +28,7 @@ public class RPCClient {
 		
 		// TODO: disconnect/close the underlying messaging connection
 		
-		throw new UnsupportedOperationException(TODO.method());
+		connection.close();
 		
 	}
 	
@@ -46,10 +45,10 @@ public class RPCClient {
 		rpctreply is the rpcreply to be unmarshalled by the client-stub
 		
 		*/
+		Message message = new Message(rpcrequest);
 		
-		if (true) {
-			throw new UnsupportedOperationException(TODO.method());
-		}
+		connection.send(message);
+		rpcreply = connection.receive().getData();
 		
 		return rpcreply;
 		
