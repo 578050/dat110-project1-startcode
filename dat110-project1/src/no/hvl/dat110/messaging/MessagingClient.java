@@ -27,7 +27,7 @@ public class MessagingClient {
 		// create connection object
 		
 		try {
-			clientSocket = new Socket(MessageConfig.MESSAGINGHOST, MessageConfig.MESSAGINGPORT);
+			clientSocket = new Socket(server, port);
 			connection = new Connection(clientSocket);
 			
 		} catch (IOException e) {

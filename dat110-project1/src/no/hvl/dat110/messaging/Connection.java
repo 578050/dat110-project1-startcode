@@ -35,16 +35,16 @@ public class Connection {
 		// TODO
 		// encapsulate the data contained in the message and write to the output stream
 		// Hint: use the encapsulate method on the message
-		
-		byte[] encoded = message.encapsulate();
 		try {
+		byte[] encoded = message.encapsulate();
+		
 			outStream.write(encoded);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			System.out.println("Sending: " + e.getMessage());
 			e.printStackTrace();
 		}
-		
 
 	}
 
@@ -57,17 +57,22 @@ public class Connection {
 		// read a segment (128 bytes) from the input stream and decapsulate into message
 		// Hint: create a new Message object and use the decapsulate method
 		
+		recvbuf = new byte[MessageConfig.SEGMENTSIZE];
+		
 		try {
-			recvbuf = inStream.readNBytes(MessageConfig.SEGMENTSIZE);
-			message = new Message(recvbuf);
-
-			message.decapsulate(recvbuf);
+			int read = inStream.read(recvbuf, 0, MessageConfig.SEGMENTSIZE);
+			
+			if(read != MessageConfig.SEGMENTSIZE) {
+				throw new IOException("recieve - missing data");
+			}
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		message = new Message(recvbuf);
+
+		message.decapsulate(recvbuf);
 	
 		return message;
 

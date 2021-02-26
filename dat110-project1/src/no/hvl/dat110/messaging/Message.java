@@ -32,12 +32,13 @@ public class Message {
 		
 		encoded = new byte[MessageConfig.SEGMENTSIZE];
 		encoded[0] = (byte) payload.length;
-		for(int i = 1; i < payload.length + 1; i++) {
-			encoded[i] = payload[i - 1]; 
-		}
-		
+//		for(int i = 0; i < payload.length; i++) {
+//			encoded[i + 1] = payload[1];
+//		}
+		System.arraycopy(payload, 0, encoded, 1, payload.length-1);
 
 		return encoded;
+		
 		
 	}
 
@@ -47,10 +48,12 @@ public class Message {
 		// decapsulate the data contained in the received byte array and store it 
 		// in the payload of this message
 		
-		payload = new byte[received[0]];
+		int size = received[0];
+		byte[] decoded = new byte[MessageConfig.SEGMENTSIZE];
 		
-		for(int i = 0; i < payload.length; i++) {
-			payload[i] = received[i+1];
+		for(int i = 0; i < size; i++) {
+			decoded[i] = received[i+1];
 		}
+		
 	}
 }

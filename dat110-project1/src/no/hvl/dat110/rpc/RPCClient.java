@@ -49,7 +49,7 @@ public class RPCClient {
 		
 		connection.send(message);
 		rpcreply = connection.receive().getData();
-		
+
 		return rpcreply;
 		
 	}

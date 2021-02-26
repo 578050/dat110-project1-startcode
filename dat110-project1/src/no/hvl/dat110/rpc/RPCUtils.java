@@ -16,15 +16,15 @@ public class RPCUtils {
 	
 	public static byte[] marshallString(byte rpcid, String str) {
 
-		byte[] encoded = new byte[MessageConfig.SEGMENTSIZE];
+		byte[] encoded = new byte[str.length()+1];
 
 		// TODO: marshall RPC identifier and string into byte array
 
 		encoded[0] = rpcid;
-		byte[] string = str.getBytes();
 		
-		for(int i = 0; i < string.length; i++) {
-			encoded[i + 1] = string[i];
+		
+		for(int i = 0; i < str.length(); i++) {
+			encoded[i + 1] = (byte)str.charAt(i);
 		}
 
 		return encoded;
@@ -36,20 +36,15 @@ public class RPCUtils {
 
 		// TODO: unmarshall String contained in data into decoded
 
-		byte[] code = new byte[MessageConfig.SEGMENTSIZE];
-		 
-		for(int i = 0; i < data.length - 1 ; i++) {
-			code[i] = data[i + 1];
-		}
+		decoded = new String(Arrays.copyOfRange(data, 1, data.length));
 		
-		decoded = new String(code).trim();
 
 		return decoded;
 	}
 
 	public static byte[] marshallVoid(byte rpcid) {
 
-		byte[] encoded = new byte[MessageConfig.SEGMENTSIZE];
+		byte[] encoded = new byte[1];
 
 		// TODO: marshall RPC identifier in case of void type
 		
@@ -98,7 +93,7 @@ public class RPCUtils {
 		ByteBuffer buffer = ByteBuffer.allocate(4);
 		buffer.putInt(x);
 		
-		for(int i = 0; i < encoded.length - 1; i++) {
+		for(int i = 0; i < encoded.length-1; i++) {
 			encoded[i + 1] = buffer.get(i); 
 		}
 		 
@@ -114,7 +109,7 @@ public class RPCUtils {
 
 		ByteBuffer buffer = ByteBuffer.allocate(4);
 		
-		for(int i = 0; i < data.length - 1; i++) {
+		for(int i = 0; i < data.length-1; i++) {
 			buffer.put(i, data[i + 1]);
 		}
 		

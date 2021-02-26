@@ -47,23 +47,27 @@ public class RPCServer {
 		   // - send back message containing RPC reply
 			
 		Message message = connection.receive();
-		byte[] code = message.getData();
-		rpcid = code[0];
+		byte[] request = message.getData();
+		rpcid = request[0];
 		
+		RPCImpl method = services.get(rpcid);
+		byte[] reply;
 		
-		   for (Integer key : services.keySet()) {
-			    if(key == rpcid) {
-			    	Message reply = new Message(services.get(key).invoke(message.getData()));
-			    	connection.send(reply);
-			    	rpcid = 0;
-			    }
-			}
-		   
-		   if (rpcid == RPCCommon.RPIDSTOP) {
+		if(method == null) {
+			reply = new byte[1];
+			reply[0] = 0;
+		} else {
+			reply = method.invoke(request);
+		}
+		
+		Message message2 = new Message(reply);
+		
+		connection.send(message2);
+		
+		  if (rpcid == RPCCommon.RPIDSTOP) {
 			   stop = true;
 		   }
 		}
-	
 	}
 	
 	public void register(int rpcid, RPCImpl impl) {

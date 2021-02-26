@@ -22,7 +22,7 @@ public class DisplayImpl implements RPCImpl {
 		String message = RPCUtils.unmarshallString(request);
 		rpcid = request[0];
 		write(message);
-		reply = RPCUtils.marshallString(rpcid, message);
+		reply = RPCUtils.marshallVoid(rpcid);
 		
 		
 		return reply;
